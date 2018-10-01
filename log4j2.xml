@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="WARN" monitorInterval="30">
+	
+	<Properties>
+	    <Property name="LOG_PATTERN">%d{dd-MMM-yyyy' 'HH:mm:ss:SSSZ} %p %c{10} %m %n</Property>
+	    <Property name="APP_LOG_ROOT">d:/Logs</Property>
+	</Properties>
+    
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>
+      	
+        <RollingFile name="appLog"
+            fileName="${APP_LOG_ROOT}/AuditLog/audit-log.json"
+            filePattern="${APP_LOG_ROOT}/AuditLog/audit-log-%d{yyyy-MM-dd}-%i.json">
+            
+            <JSONLayout complete="false" compact="false"/>
+            
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            
+            <DefaultRolloverStrategy max="1" />
+        </RollingFile>
+        
+        <RollingFile name="rootLog"
+            fileName="${APP_LOG_ROOT}/AuditLog/root-log.log"
+            filePattern="${APP_LOG_ROOT}/AuditLog/root-log-%d{yyyy-MM-dd}-%i.log">
+            
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            
+            <DefaultRolloverStrategy max="1" />
+        </RollingFile>
+ 
+    </Appenders>
+    <Loggers>
+ 
+        <Logger name="com.zycus.aspects" additivity="false">
+            <AppenderRef ref="appLog" />
+            <AppenderRef ref="Console" />
+        </Logger>
+ 
+        <Root level="debug">
+        	<AppenderRef ref="rootLog" />
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+</Configuration>
